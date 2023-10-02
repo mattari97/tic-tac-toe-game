@@ -38,7 +38,7 @@
   --fs-xl: 2.5rem;
 
   /* outline */
-  --outline-focus: 2px dotted hsl(var(--clr-neutral-100));
+  --outline-focus: 3px dotted hsl(var(--clr-neutral-100));
 
   /* shadows */
   --shadow-sm: 0px -4px 0px 0px hsl(var(--clr-shadow)) inset;
@@ -181,6 +181,45 @@ a:not([class]) {
   border: 0;
 }
 
+.btn {
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  font-size: var(--fs-base);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.07813rem;
+  line-height: normal;
+  color: hsl(var(--clr-neutral-400));
+  text-transform: uppercase;
+  padding-block: var(--space-base) var(--space-md);
+  border-radius: var(--br-md);
+  transition: background-color 150ms linear;
+
+  &-primary {
+    background-color: hsl(var(--clr-primary));
+    box-shadow: var(--shadow-primary);
+
+    &:hover,
+    &:focus-visible {
+      background-color: hsl(var(--clr-primary-muted));
+    }
+  }
+
+  &-secondary {
+    background-color: hsl(var(--clr-secondary));
+    box-shadow: var(--shadow-secondary);
+
+    &:hover,
+    &:focus-visible {
+      background-color: hsl(var(--clr-secondary-muted));
+    }
+  }
+
+  @media (min-width: 768px) {
+    font-size: var(--fs-md);
+  }
+}
+
 /* ----------------- */
 /* General styles    */
 /* ----------------- */
@@ -196,4 +235,5 @@ body {
 
 *:focus-visible {
   outline: var(--outline-focus);
+  outline-offset: 1px;
 }

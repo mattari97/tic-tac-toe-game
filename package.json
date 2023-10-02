@@ -25,6 +25,7 @@
     "postcss-custom-media": "^10.0.1",
     "postcss-nested": "^6.0.1",
     "typescript": "^5.0.2",
-    "vite": "^4.4.5"
+    "vite": "^4.4.5",
+    "vite-plugin-svgr": "^4.1.0"
   }
 }
