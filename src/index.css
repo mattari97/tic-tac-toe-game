@@ -38,8 +38,7 @@
   --fs-xl: 2.5rem;
 
   /* outline */
-  --outline-focus: 2px solid hsl(var(--clr-green));
-  --outline-error: 2px solid hsl(var(--clr-error));
+  --outline-focus: 2px dotted hsl(var(--clr-neutral-100));
 
   /* shadows */
   --shadow-sm: 0px -4px 0px 0px hsl(var(--clr-shadow)) inset;
@@ -188,11 +187,11 @@ a:not([class]) {
 
 body {
   font-family: var(--ff-sans);
-  font-size: var(--fs-body);
+  font-size: var(--fs-sm);
   line-height: var(--lh-base);
   font-weight: var(--fw-normal);
-  color: hsl(var(--clr-gray));
-  background-color: hsl(var(--clr-dark));
+  color: hsl(var(--clr-neutral-200));
+  background-color: hsl(var(--clr-neutral-400));
 }
 
 *:focus-visible {
