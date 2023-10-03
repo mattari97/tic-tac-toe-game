@@ -1,0 +1,208 @@
+.container {
+  width: var(--container-width);
+  padding: var(--container-padding);
+  margin-inline: auto;
+
+  @media (min-width: 768px) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
+
+.header {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 1fr auto 1fr;
+  margin-bottom: var(--space-3xl);
+
+  @media (min-width: 768px) {
+    margin-bottom: 1.25rem;
+  }
+
+  & > div {
+    width: 6rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    background-color: hsl(var(--clr-neutral-300));
+    padding-bottom: 4px;
+    border-radius: var(--br-sm);
+    box-shadow: var(--shadow-sm);
+
+    & > svg {
+      height: 1rem;
+    }
+
+    & > span {
+      font-size: var(--fs-sm);
+      font-weight: var(--fw-bold);
+      line-height: normal;
+      letter-spacing: 0.05469rem;
+      text-transform: uppercase;
+    }
+
+    @media (min-width: 768px) {
+      width: 8.75rem;
+      height: 3.25rem;
+
+      & > svg {
+        height: 1.25rem;
+      }
+
+      & > span {
+        font-size: var(--fs-base);
+        letter-spacing: 0.0625rem;
+      }
+    }
+  }
+
+  & > button {
+    cursor: pointer;
+    justify-self: end;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: grid;
+    place-items: center;
+    background-color: hsl(var(--clr-neutral-200));
+    border-radius: var(--br-sm);
+    box-shadow: var(--shadow-sm-light);
+    padding-bottom: 4px;
+    transition: background-color 150ms linear;
+
+    &:hover,
+    &:focus-visible {
+      background-color: hsl(var(--clr-neutral-100));
+    }
+
+    & > svg {
+      width: 1rem;
+      height: 1rem;
+    }
+
+    @media (min-width: 768px) {
+      width: 3.25rem;
+      height: 3.25rem;
+
+      & > svg {
+        width: 1.25rem;
+        height: 1.25rem;
+      }
+    }
+  }
+}
+
+.board {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  aspect-ratio: 1;
+  margin-bottom: 1.25rem;
+
+  & > button {
+    position: relative;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    padding-bottom: var(--space-xs);
+    background-color: hsl(var(--clr-neutral-300));
+    border-radius: var(--br-base);
+    box-shadow: var(--shadow-base);
+
+    & > .iconO,
+    & > .iconOOutline {
+      color: hsl(var(--clr-primary));
+    }
+
+    & > .iconX,
+    & > .iconXOutline {
+      color: hsl(var(--clr-secondary));
+    }
+
+    & > svg {
+      width: 2.5rem;
+      height: 2.5rem;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, calc(-50% - 0.25rem));
+      transition: opacity 150ms linear;
+      opacity: 0;
+
+      @media (min-width: 768px) {
+        width: 4rem;
+        height: 4rem;
+      }
+    }
+
+    &[data-mark='o'] > .iconO,
+    &[data-mark='x'] > .iconX {
+      opacity: 1;
+    }
+
+    &[data-mark=''][data-current='x']:hover > .iconXOutline,
+    &[data-mark=''][data-current='x']:focus-visible > .iconXOutline {
+      opacity: 1;
+    }
+
+    &[data-mark=''][data-current='o']:hover > .iconOOutline,
+    &[data-mark=''][data-current='o']:focus-visible > .iconOOutline {
+      opacity: 1;
+    }
+  }
+}
+
+.scores {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: repeat(3, 1fr);
+
+  & > .scoreX {
+    background-color: hsl(var(--clr-secondary));
+  }
+
+  & > .ties {
+    background-color: hsl(var(--clr-neutral-200));
+  }
+
+  & > .scoreO {
+    background-color: hsl(var(--clr-primary));
+  }
+
+  & > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: var(--br-base);
+    padding: var(--space-sm);
+
+    & > span {
+      color: hsl(var(--clr-neutral-400));
+      line-height: normal;
+      text-transform: uppercase;
+    }
+
+    & > span:nth-child(1) {
+      font-size: var(--fs-sm);
+      font-weight: var(--fw-normal);
+      letter-spacing: 0.05469rem;
+    }
+
+    & > span:nth-child(2) {
+      font-size: var(--fs-md);
+      font-weight: var(--fw-bold);
+      letter-spacing: 0.07813rem;
+    }
+
+    @media (min-width: 768px) {
+      & > span:nth-child(2) {
+        font-size: var(--fs-lg);
+        letter-spacing: 0.09375rem;
+      }
+    }
+  }
+}

@@ -18,6 +18,7 @@
   --clr-secondary-muted: 178 75% 65%;
   --clr-secondary-shadow: 178 78% 31%;
   --clr-shadow: 201 45% 11%;
+  --clr-shadow-light: 199 17% 51%;
 
   /* font-families */
   --ff-sans: 'Outfit', sans-serif;
@@ -42,11 +43,13 @@
 
   /* shadows */
   --shadow-sm: 0px -4px 0px 0px hsl(var(--clr-shadow)) inset;
+  --shadow-sm-light: 0px -4px 0px 0px hsl(var(--clr-shadow-light)) inset;
   --shadow-base: 0px -8px 0px 0px hsl(var(--clr-shadow)) inset;
   --shadow-primary: 0px -8px 0px 0px hsl(var(--clr-primary-shadow)) inset;
   --shadow-secondary: 0px -8px 0px 0px hsl(var(--clr-secondary-shadow)) inset;
 
   /* border-radius */
+  --br-sm: 0.3125rem;
   --br-base: 0.625rem;
   --br-md: 0.9375rem;
 
@@ -67,6 +70,10 @@
   --space-8xl: 9rem; /* 128px */
   --space-9xl: 10rem; /* 128px */
   --space-10xl: 12rem; /* 128px */
+
+  /* container */
+  --container-width: min(100%, 28.75rem);
+  --container-padding: var(--space-md);
 }
 
 /* ----------------- */
