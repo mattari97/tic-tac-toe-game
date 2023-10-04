@@ -9,20 +9,21 @@ export interface Player {
   score: number;
 }
 
-export interface Winner {
-  message: string;
-  mark: Mark;
+export interface Result {
+  message?: string;
+  type: Mark | 'tie';
 }
 
 export interface Store {
   gamemode: Gamemode;
   playerX: Player;
   playerO: Player;
-  isDraw: boolean;
   ties: number;
   currentMark: Mark;
   currentBoard: Board;
-  winner: Winner | null;
+  result: Result | null;
   startGame: (gamemode: Gamemode, p1Choice: Mark) => void;
   updateBoard: (i: number, curr: Mark | '') => void;
+  startNextGame: () => void;
+  quitGame: () => void;
 }

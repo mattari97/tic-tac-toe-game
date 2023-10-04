@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Board, Gamemode, Mark, Player, Store, Winner } from '../types';
+import { Board, Gamemode, Mark, Player, Store, Result } from '../types';
 
 const DEFAULT_PLAYER: Player = { name: 'P1', score: 0 };
 const DEFAULT_BOARD: Board = ['', '', '', '', '', '', '', '', ''];
@@ -29,7 +29,6 @@ const checkWinner = (currentBoard: Store['currentBoard'], currentMark: Store['cu
 };
 
 const checkDraw = (currentBoard: Store['currentBoard']) => {
-  console.log(currentBoard);
   for (let i = 0; i < currentBoard.length; i++) {
     const cell = currentBoard[i];
     if (cell === '') break;
@@ -48,7 +47,7 @@ const updateWinningScores = (store: Store): Pick<Store, 'playerO' | 'playerX'> =
   }
 };
 
-const getWinningMessage = (store: Store): Winner => {
+const getWinningMessage = (store: Store): Result => {
   const winningPlayer = store.currentMark === 'x' ? store.playerX : store.playerO;
   let message: string;
   switch (winningPlayer.name) {
@@ -64,7 +63,7 @@ const getWinningMessage = (store: Store): Winner => {
     case 'P2':
       message = 'Player 2 wins!';
   }
-  return { mark: store.currentMark, message };
+  return { type: store.currentMark, message };
 };
 
 /* ----------------- */
@@ -78,8 +77,7 @@ const useStore = create<Store>()((set) => ({
   playerO: { ...DEFAULT_PLAYER },
   currentBoard: [...DEFAULT_BOARD],
   ties: 0,
-  winner: null,
-  isDraw: false,
+  result: null,
 
   startGame: (gamemode: Gamemode, p1Choice: Mark) => {
     const p1Name: Player['name'] = gamemode === 'player' ? 'P1' : 'You';
@@ -98,15 +96,28 @@ const useStore = create<Store>()((set) => ({
       const currentMark: Mark = state.currentMark === 'x' ? 'o' : 'x';
       if (checkWinner(currentBoard, state.currentMark)) {
         const players = updateWinningScores(state);
-        const winner = getWinningMessage(state);
-        return { ...state, ...players, currentBoard, currentMark, winner };
+        const result = getWinningMessage(state);
+        return { ...state, ...players, currentBoard, currentMark, result };
       } else if (checkDraw(currentBoard)) {
-        return { ...state, currentBoard, currentMark, isDraw: true, ties: ++state.ties };
+        const result: Result = { type: 'tie' };
+        return { ...state, currentBoard, currentMark, result, ties: ++state.ties };
       } else {
         return { ...state, currentBoard, currentMark };
       }
     });
   },
+  startNextGame: () => set((state) => ({ ...state, currentBoard: [...DEFAULT_BOARD], result: null })),
+  quitGame: () =>
+    set((state) => ({
+      ...state,
+      gamemode: 'idle',
+      currentMark: 'x',
+      playerX: { ...DEFAULT_PLAYER },
+      playerO: { ...DEFAULT_PLAYER },
+      currentBoard: [...DEFAULT_BOARD],
+      ties: 0,
+      result: null,
+    })),
 }));
 
 export default useStore;
