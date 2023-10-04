@@ -107,6 +107,15 @@ const useStore = create<Store>()((set) => ({
     });
   },
   startNextGame: () => set((state) => ({ ...state, currentBoard: [...DEFAULT_BOARD], result: null })),
+  restartGame: () =>
+    set((state) => ({
+      ...state,
+      currentMark: 'x',
+      playerO: { ...state.playerO, score: 0 },
+      playerX: { ...state.playerX, score: 0 },
+      ties: 0,
+      currentBoard: [...DEFAULT_BOARD],
+    })),
   quitGame: () =>
     set((state) => ({
       ...state,

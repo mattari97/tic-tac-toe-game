@@ -11,7 +11,7 @@ export interface Player {
 
 export interface Result {
   message?: string;
-  type: Mark | 'tie';
+  type: Mark | 'tie' | 'restart';
 }
 
 export interface Store {
@@ -25,5 +25,6 @@ export interface Store {
   startGame: (gamemode: Gamemode, p1Choice: Mark) => void;
   updateBoard: (i: number, curr: Mark | '') => void;
   startNextGame: () => void;
+  restartGame: () => void;
   quitGame: () => void;
 }
