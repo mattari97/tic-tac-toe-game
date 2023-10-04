@@ -34,7 +34,8 @@
     gap: var(--space-sm);
     margin-bottom: var(--space-md);
 
-    &[data-variant='tie'] {
+    &[data-variant='tie'],
+    &[data-variant='restart'] {
       color: hsl(var(--clr-neutral-200));
     }
 

@@ -7,7 +7,11 @@ import IconOOutline from '../../assets/icon-o-outline.svg?react';
 import Restart from '../../assets/icon-restart.svg?react';
 import { useStore } from '../../stores';
 
-function Board() {
+interface BoardProps {
+  toggleRestartModal: (props: unknown) => void;
+}
+
+function Board({ toggleRestartModal }: BoardProps) {
   const currMark = useStore((state) => state.currentMark);
   const currBoard = useStore((state) => state.currentBoard);
   const playerX = useStore((state) => state.playerX);
@@ -23,7 +27,7 @@ function Board() {
           {currMark === 'x' ? <IconX /> : <IconO />}
           <span>Turn</span>
         </div>
-        <button aria-label="Restart the game">
+        <button onClick={toggleRestartModal} aria-label="Restart the game">
           <Restart />
         </button>
       </div>
