@@ -1,12 +1,11 @@
 import styles from './App.module.css';
 import { Board, NewGame } from './layouts';
-
-type Rules = null | 'cpu' | 'player';
+import { useStore } from './stores';
 
 function App() {
-  const rules: Rules = 'cpu';
+  const gamemode = useStore((state) => state.gamemode);
 
-  return <div className={styles.container}>{!rules ? <NewGame /> : <Board />}</div>;
+  return <div className={styles.container}>{gamemode === 'idle' ? <NewGame /> : <Board />}</div>;
 }
 
 export default App;
