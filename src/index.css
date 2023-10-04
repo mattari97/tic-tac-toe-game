@@ -44,6 +44,7 @@
   /* shadows */
   --shadow-sm: 0px -4px 0px 0px hsl(var(--clr-shadow)) inset;
   --shadow-sm-light: 0px -4px 0px 0px hsl(var(--clr-shadow-light)) inset;
+  --shadow-sm-primary: 0px -4px 0px 0px hsl(var(--clr-primary-shadow)) inset;
   --shadow-base: 0px -8px 0px 0px hsl(var(--clr-shadow)) inset;
   --shadow-primary: 0px -8px 0px 0px hsl(var(--clr-primary-shadow)) inset;
   --shadow-secondary: 0px -8px 0px 0px hsl(var(--clr-secondary-shadow)) inset;
@@ -224,6 +225,41 @@ a:not([class]) {
 
   @media (min-width: 768px) {
     font-size: var(--fs-md);
+  }
+}
+
+.btn-sm {
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  font-size: var(--fs-base);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.0625rem;
+  line-height: normal;
+  color: hsl(var(--clr-neutral-400));
+  text-transform: uppercase;
+  padding: var(--space-base);
+  border-radius: var(--br-base);
+  transition: background-color 150ms linear;
+
+  &-primary {
+    background-color: hsl(var(--clr-primary));
+    box-shadow: var(--shadow-sm-primary);
+
+    &:hover,
+    &:focus-visible {
+      background-color: hsl(var(--clr-primary-muted));
+    }
+  }
+
+  &-light {
+    background-color: hsl(var(--clr-neutral-200));
+    box-shadow: var(--shadow-sm-light);
+
+    &:hover,
+    &:focus-visible {
+      background-color: hsl(var(--clr-neutral-100));
+    }
   }
 }
 

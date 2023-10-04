@@ -1,0 +1,68 @@
+.dialog {
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: hsl(var(--clr-neutral-300));
+  width: 100%;
+  max-width: 100%;
+  border: none;
+
+  &::backdrop {
+    background-color: hsl(0 0% 0% / 0.5);
+  }
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-block: var(--space-xl);
+
+  & > h2 {
+    color: hsl(var(--clr-neutral-200));
+    text-align: center;
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-bold);
+    line-height: normal;
+    letter-spacing: 0.05469rem;
+    text-transform: uppercase;
+    margin-bottom: var(--space-base);
+  }
+
+  & > div {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+
+    &[data-variant='tie'] {
+      color: hsl(var(--clr-neutral-200));
+    }
+
+    &[data-variant='x'] {
+      color: hsl(var(--clr-secondary));
+    }
+
+    &[data-variant='o'] {
+      color: hsl(var(--clr-primary));
+    }
+
+    & > svg {
+      width: 1.75rem;
+      height: 1.75rem;
+    }
+
+    & > span {
+      text-align: center;
+      font-size: var(--fs-lg);
+      font-weight: var(--fw-bold);
+      line-height: normal;
+      letter-spacing: 0.09375rem;
+      text-transform: uppercase;
+    }
+  }
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-base);
+}
