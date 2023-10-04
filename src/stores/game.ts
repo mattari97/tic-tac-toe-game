@@ -14,7 +14,12 @@ const WIN_COMBINATIONS = [
   [6, 4, 2],
 ];
 
-const checkWinner = (currentBoard: Store['currentBoard'], currentMark: Store['currentMark']): boolean => {
+const checkWinner = (
+  currentBoard: Store['currentBoard'],
+  currentMark: Store['currentMark'],
+  nbOfMoves: number
+): boolean => {
+  if (nbOfMoves < 5) return false;
   for (let i = 0; i < WIN_COMBINATIONS.length; i++) {
     const curr = WIN_COMBINATIONS[i];
     if (
@@ -28,7 +33,8 @@ const checkWinner = (currentBoard: Store['currentBoard'], currentMark: Store['cu
   return false;
 };
 
-const checkDraw = (currentBoard: Store['currentBoard']) => {
+const checkDraw = (currentBoard: Store['currentBoard'], nbOfMoves: number) => {
+  if (nbOfMoves < 7) return false;
   for (let i = 0; i < currentBoard.length; i++) {
     const cell = currentBoard[i];
     if (cell === '') break;
@@ -78,6 +84,7 @@ const useStore = create<Store>()((set) => ({
   currentBoard: [...DEFAULT_BOARD],
   ties: 0,
   result: null,
+  nbOfMoves: 0,
 
   startGame: (gamemode: Gamemode, p1Choice: Mark) => {
     const p1Name: Player['name'] = gamemode === 'player' ? 'P1' : 'You';
@@ -94,19 +101,20 @@ const useStore = create<Store>()((set) => ({
     set((state) => {
       const currentBoard = state.currentBoard.map((value, i) => (i === index ? state.currentMark : value));
       const currentMark: Mark = state.currentMark === 'x' ? 'o' : 'x';
-      if (checkWinner(currentBoard, state.currentMark)) {
+      const nbOfMoves = ++state.nbOfMoves;
+      if (checkWinner(currentBoard, state.currentMark, nbOfMoves)) {
         const players = updateWinningScores(state);
         const result = getWinningMessage(state);
         return { ...state, ...players, currentBoard, currentMark, result };
-      } else if (checkDraw(currentBoard)) {
+      } else if (checkDraw(currentBoard, nbOfMoves)) {
         const result: Result = { type: 'tie' };
         return { ...state, currentBoard, currentMark, result, ties: ++state.ties };
       } else {
-        return { ...state, currentBoard, currentMark };
+        return { ...state, currentBoard, currentMark, nbOfMoves };
       }
     });
   },
-  startNextGame: () => set((state) => ({ ...state, currentBoard: [...DEFAULT_BOARD], result: null })),
+  startNextGame: () => set((state) => ({ ...state, currentBoard: [...DEFAULT_BOARD], result: null, nbOfMoves: 0 })),
   restartGame: () =>
     set((state) => ({
       ...state,
@@ -115,6 +123,7 @@ const useStore = create<Store>()((set) => ({
       playerX: { ...state.playerX, score: 0 },
       ties: 0,
       currentBoard: [...DEFAULT_BOARD],
+      nbOfMoves: 0,
     })),
   quitGame: () =>
     set((state) => ({
@@ -126,6 +135,7 @@ const useStore = create<Store>()((set) => ({
       currentBoard: [...DEFAULT_BOARD],
       ties: 0,
       result: null,
+      nbOfMoves: 0,
     })),
 }));
 

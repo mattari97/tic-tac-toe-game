@@ -18,6 +18,7 @@ export interface Store {
   gamemode: Gamemode;
   playerX: Player;
   playerO: Player;
+  nbOfMoves: number;
   ties: number;
   currentMark: Mark;
   currentBoard: Board;
