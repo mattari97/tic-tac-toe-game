@@ -1,7 +1,7 @@
 .container {
   width: var(--container-width);
   padding: var(--container-padding);
-  flex-grow: 1;
+  margin-inline: auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
