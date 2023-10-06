@@ -23,7 +23,6 @@ function Board({ toggleRestartModal }: BoardProps) {
   const updateBoard = useStore((state) => state.updateBoard);
 
   React.useEffect(() => {
-    console.log('component', isCpuMove);
     if (!isCpuMove) return;
     updateBoard();
   }, [isCpuMove, updateBoard]);
