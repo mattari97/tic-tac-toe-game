@@ -3,11 +3,7 @@ import { Gamemode, Mark, Player, Store, Result } from '../types';
 import { DEFAULT_PLAYER, DEFAULT_BOARD } from './constants';
 import { checkDraw, checkWinner, getCpuNextMove, getWinningMessage, updateWinningScores } from './helpers';
 
-/* ----------------- */
-/* Game Store        */
-/* ----------------- */
-
-const useStore = create<Store>()((set) => ({
+const DEFAULT_STORE = {
   gamemode: 'idle',
   currentMark: 'x',
   startingMark: 'x',
@@ -18,6 +14,14 @@ const useStore = create<Store>()((set) => ({
   nbOfMoves: 0,
   result: null,
   isCpuMove: false,
+} as Omit<Store, 'startGame' | 'updateBoard' | 'startNextGame' | 'restartGame' | 'quitGame'>;
+
+/* ----------------- */
+/* Game Store        */
+/* ----------------- */
+
+const useStore = create<Store>()((set) => ({
+  ...DEFAULT_STORE,
 
   startGame: (gamemode: Gamemode, p1Choice: Mark) => {
     const p1Name: Player['name'] = gamemode === 'player' ? 'P1' : 'You';
@@ -87,20 +91,7 @@ const useStore = create<Store>()((set) => ({
       currentBoard: [...DEFAULT_BOARD],
       isCpuMove: state.gamemode === 'cpu' && state.playerX.name === 'Cpu',
     })),
-  quitGame: () =>
-    set((state) => ({
-      ...state,
-      gamemode: 'idle',
-      currentMark: 'x',
-      startingMark: 'x',
-      playerX: { ...DEFAULT_PLAYER },
-      playerO: { ...DEFAULT_PLAYER },
-      currentBoard: [...DEFAULT_BOARD],
-      ties: 0,
-      result: null,
-      nbOfMoves: 0,
-      isCpuMove: false,
-    })),
+  quitGame: () => set((state) => ({ ...state, ...DEFAULT_STORE })),
 }));
 
 export default useStore;
