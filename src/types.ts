@@ -20,6 +20,7 @@ export interface Store {
   playerO: Player;
   nbOfMoves: number;
   ties: number;
+  startingMark: Mark;
   currentMark: Mark;
   currentBoard: Board;
   result: Result | null;
