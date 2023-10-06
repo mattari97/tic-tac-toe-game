@@ -14,7 +14,7 @@ interface BoardProps {
 }
 
 function Board({ toggleRestartModal }: BoardProps) {
-  const initialized = React.useRef(false);
+  // const initialized = React.useRef(false);
   const currMark = useStore((state) => state.currentMark);
   const currBoard = useStore((state) => state.currentBoard);
   const playerX = useStore((state) => state.playerX);
@@ -24,13 +24,10 @@ function Board({ toggleRestartModal }: BoardProps) {
   const updateBoard = useStore((state) => state.updateBoard);
 
   React.useEffect(() => {
-    if (!initialized.current) {
-      initialized.current = true;
-    } else {
-      console.log('component', isCpuMove);
-      if (!isCpuMove) return;
-      updateBoard();
-    }
+    console.log('component', isCpuMove);
+    if (!isCpuMove) return;
+    // initialized.current = isCpuMove;
+    updateBoard();
   }, [isCpuMove, updateBoard]);
 
   return (
