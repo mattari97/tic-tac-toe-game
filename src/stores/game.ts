@@ -72,6 +72,20 @@ const getWinningMessage = (store: Store): Result => {
   return { type: store.currentMark, message };
 };
 
+const getCpuNextMove = (currentBoard: Store['currentBoard']) => {
+  const clone = [...currentBoard];
+  const legalMoves: number[] = [];
+  for (let i = 0; i < clone.length; i++) {
+    const curr = clone[i];
+    if (curr !== '') continue;
+    legalMoves.push(i);
+  }
+  const randomIndex = legalMoves[Math.floor(Math.random() * legalMoves.length)];
+  return randomIndex;
+};
+
+// const sleep = (delay: number) => new Promise((resolve) => setTimeout(resolve, delay));
+
 /* ----------------- */
 /* Game Store        */
 /* ----------------- */
@@ -83,8 +97,9 @@ const useStore = create<Store>()((set) => ({
   playerO: { ...DEFAULT_PLAYER },
   currentBoard: [...DEFAULT_BOARD],
   ties: 0,
-  result: null,
   nbOfMoves: 0,
+  result: null,
+  isCpuMove: false,
 
   startGame: (gamemode: Gamemode, p1Choice: Mark) => {
     const p1Name: Player['name'] = gamemode === 'player' ? 'P1' : 'You';
@@ -93,28 +108,48 @@ const useStore = create<Store>()((set) => ({
     const playerX: Player = { name: p1Choice === 'x' ? p1Name : p2Name, score: 0 };
     const playerO: Player = { name: p1Choice === 'o' ? p1Name : p2Name, score: 0 };
 
-    return set((state) => ({ ...state, gamemode, playerX, playerO }));
-  },
-  updateBoard: (index: number, curr: Mark | '') => {
-    if (curr !== '') return;
+    const isCpuMove = gamemode === 'cpu' && playerX.name === 'Cpu';
 
+    return set((state) => ({ ...state, gamemode, playerX, playerO, isCpuMove }));
+  },
+  updateBoard: (index?: number) =>
     set((state) => {
-      const currentBoard = state.currentBoard.map((value, i) => (i === index ? state.currentMark : value));
+      if (index && state.currentBoard[index] !== '') return state;
+      let currentBoard: Store['currentBoard'];
+
+      if (state.isCpuMove) {
+        console.log('cpu move');
+        const cpuMoveIndex = getCpuNextMove(state.currentBoard);
+        currentBoard = state.currentBoard.map((value, i) => (i === cpuMoveIndex ? state.currentMark : value));
+      } else {
+        console.log('player move');
+        currentBoard = state.currentBoard.map((value, i) => (i === index ? state.currentMark : value));
+      }
+
       const currentMark: Mark = state.currentMark === 'x' ? 'o' : 'x';
       const nbOfMoves = ++state.nbOfMoves;
+
       if (checkWinner(currentBoard, state.currentMark, nbOfMoves)) {
         const players = updateWinningScores(state);
         const result = getWinningMessage(state);
-        return { ...state, ...players, currentBoard, currentMark, result };
+        return { ...state, ...players, currentBoard, currentMark, result, isCpuMove: false };
       } else if (checkDraw(currentBoard, nbOfMoves)) {
         const result: Result = { type: 'tie' };
-        return { ...state, currentBoard, currentMark, result, ties: ++state.ties };
+        return { ...state, currentBoard, currentMark, result, ties: ++state.ties, isCpuMove: false };
       } else {
-        return { ...state, currentBoard, currentMark, nbOfMoves };
+        const isCpuMove = !state.isCpuMove && state.gamemode === 'cpu' ? true : false;
+        console.log('store', isCpuMove);
+        return { ...state, currentBoard, currentMark, nbOfMoves, isCpuMove };
       }
-    });
-  },
-  startNextGame: () => set((state) => ({ ...state, currentBoard: [...DEFAULT_BOARD], result: null, nbOfMoves: 0 })),
+    }),
+  startNextGame: () =>
+    set((state) => {
+      const isCpuMove =
+        state.gamemode === 'cpu' &&
+        ((state.currentMark === 'x' && state.playerX.name === 'Cpu') ||
+          (state.currentMark === 'o' && state.playerO.name === 'Cpu'));
+      return { ...state, currentBoard: [...DEFAULT_BOARD], result: null, nbOfMoves: 0, isCpuMove };
+    }),
   restartGame: () =>
     set((state) => ({
       ...state,
@@ -122,8 +157,9 @@ const useStore = create<Store>()((set) => ({
       playerO: { ...state.playerO, score: 0 },
       playerX: { ...state.playerX, score: 0 },
       ties: 0,
-      currentBoard: [...DEFAULT_BOARD],
       nbOfMoves: 0,
+      currentBoard: [...DEFAULT_BOARD],
+      isCpuMove: state.gamemode === 'cpu' && state.playerX.name === 'Cpu',
     })),
   quitGame: () =>
     set((state) => ({
@@ -136,6 +172,7 @@ const useStore = create<Store>()((set) => ({
       ties: 0,
       result: null,
       nbOfMoves: 0,
+      isCpuMove: false,
     })),
 }));
 

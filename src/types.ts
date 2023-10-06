@@ -23,8 +23,9 @@ export interface Store {
   currentMark: Mark;
   currentBoard: Board;
   result: Result | null;
+  isCpuMove: boolean;
   startGame: (gamemode: Gamemode, p1Choice: Mark) => void;
-  updateBoard: (i: number, curr: Mark | '') => void;
+  updateBoard: (i?: number) => void;
   startNextGame: () => void;
   restartGame: () => void;
   quitGame: () => void;

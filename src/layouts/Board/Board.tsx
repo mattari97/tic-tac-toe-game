@@ -1,3 +1,5 @@
+import * as React from 'react';
+
 import styles from './Board.module.css';
 import Logo from '../../assets/logo.svg?react';
 import IconX from '../../assets/icon-x.svg?react';
@@ -12,12 +14,24 @@ interface BoardProps {
 }
 
 function Board({ toggleRestartModal }: BoardProps) {
+  const initialized = React.useRef(false);
   const currMark = useStore((state) => state.currentMark);
   const currBoard = useStore((state) => state.currentBoard);
   const playerX = useStore((state) => state.playerX);
   const playerO = useStore((state) => state.playerO);
   const ties = useStore((state) => state.ties);
+  const isCpuMove = useStore((state) => state.isCpuMove);
   const updateBoard = useStore((state) => state.updateBoard);
+
+  React.useEffect(() => {
+    if (!initialized.current) {
+      initialized.current = true;
+    } else {
+      console.log('component', isCpuMove);
+      if (!isCpuMove) return;
+      updateBoard();
+    }
+  }, [isCpuMove, updateBoard]);
 
   return (
     <div className={styles.container}>
@@ -33,7 +47,7 @@ function Board({ toggleRestartModal }: BoardProps) {
       </div>
       <div className={styles.board}>
         {currBoard.map((mark, index) => (
-          <button data-mark={mark} data-current={currMark} onClick={() => updateBoard(index, mark)} key={index}>
+          <button data-mark={mark} data-current={currMark} onClick={() => updateBoard(index)} key={index}>
             <IconO className={styles.iconO} aria-label="O mark" aria-hidden="true" />
             <IconX className={styles.iconX} aria-label="X mark" aria-hidden="true" />
             <IconOOutline className={styles.iconOOutline} aria-hidden="true" />
