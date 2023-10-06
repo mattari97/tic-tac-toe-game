@@ -36,11 +36,9 @@ const useStore = create<Store>()((set) => ({
       let currentBoard: Store['currentBoard'];
 
       if (state.isCpuMove) {
-        console.log('cpu move');
         const cpuMoveIndex = getCpuNextMove(state.currentBoard, state.currentMark);
         currentBoard = state.currentBoard.map((value, i) => (i === cpuMoveIndex ? state.currentMark : value));
       } else {
-        console.log('player move');
         currentBoard = state.currentBoard.map((value, i) => (i === index ? state.currentMark : value));
       }
 
