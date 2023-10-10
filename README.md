@@ -49,8 +49,8 @@ Bonus:
 
 ### Links
 
-- [Solution URL](https://www.frontendmentor.io/solutions/planets-fact-site-react-typescript-postcss-animejs-AqhbRhDKf_)
-- [Live Site URL](https://planets-fact-site-acdev.vercel.app/)
+- [Solution URL](https://www.frontendmentor.io/solutions/tic-tac-toe-game-react-typescript-postcss-2xrzLGvqTY)
+- [Live Site URL](https://tic-tac-toe-game-acdev.vercel.app/)
 
 ## My process
 
