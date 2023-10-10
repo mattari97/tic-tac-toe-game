@@ -31,3 +31,5 @@ export interface Store {
   restartGame: () => void;
   quitGame: () => void;
 }
+
+export type InitialStore = Omit<Store, 'startGame' | 'updateBoard' | 'startNextGame' | 'restartGame' | 'quitGame'>;

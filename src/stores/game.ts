@@ -1,5 +1,6 @@
 import { create } from 'zustand';
-import { Gamemode, Mark, Player, Store, Result } from '../types';
+import { clearLocalStorageData, getLocalStorageData, setLocalStorageData } from './localStorage';
+import { Gamemode, Mark, Player, Store, Result, InitialStore } from '../types';
 import { DEFAULT_PLAYER, DEFAULT_BOARD } from './constants';
 import { checkDraw, checkWinner, getCpuNextMove, getWinningMessage, updateWinningScores } from './helpers';
 
@@ -14,14 +15,14 @@ const DEFAULT_STORE = {
   nbOfMoves: 0,
   result: null,
   isCpuMove: false,
-} as Omit<Store, 'startGame' | 'updateBoard' | 'startNextGame' | 'restartGame' | 'quitGame'>;
+} as InitialStore;
 
 /* ----------------- */
 /* Game Store        */
 /* ----------------- */
 
 const useStore = create<Store>()((set) => ({
-  ...DEFAULT_STORE,
+  ...getLocalStorageData(DEFAULT_STORE),
 
   startGame: (gamemode: Gamemode, p1Choice: Mark) => {
     const p1Name: Player['name'] = gamemode === 'player' ? 'P1' : 'You';
@@ -32,7 +33,11 @@ const useStore = create<Store>()((set) => ({
 
     const isCpuMove = gamemode === 'cpu' && playerX.name === 'Cpu';
 
-    return set((state) => ({ ...state, gamemode, playerX, playerO, isCpuMove }));
+    return set((state) => {
+      const newState = { ...state, gamemode, playerX, playerO, isCpuMove };
+      setLocalStorageData(newState);
+      return newState;
+    });
   },
   updateBoard: (index?: number) =>
     set((state) => {
@@ -51,14 +56,20 @@ const useStore = create<Store>()((set) => ({
       if (checkWinner(currentBoard, state.currentMark, nbOfMoves)) {
         const players = updateWinningScores(state);
         const result = getWinningMessage(state);
-        return { ...state, ...players, currentBoard, result, isCpuMove: false };
+        const winState = { ...state, ...players, currentBoard, result, isCpuMove: false };
+        setLocalStorageData(winState);
+        return winState;
       } else if (checkDraw(currentBoard, nbOfMoves)) {
         const result: Result = { type: 'tie' };
-        return { ...state, currentBoard, result, ties: ++state.ties, isCpuMove: false };
+        const drawState = { ...state, currentBoard, result, ties: ++state.ties, isCpuMove: false };
+        setLocalStorageData(drawState);
+        return drawState;
       } else {
         const currentMark: Mark = state.currentMark === 'x' ? 'o' : 'x';
         const isCpuMove = !state.isCpuMove && state.gamemode === 'cpu' ? true : false;
-        return { ...state, currentBoard, currentMark, nbOfMoves, isCpuMove };
+        const newState = { ...state, currentBoard, currentMark, nbOfMoves, isCpuMove };
+        setLocalStorageData(newState);
+        return newState;
       }
     }),
   startNextGame: () =>
@@ -69,7 +80,7 @@ const useStore = create<Store>()((set) => ({
         state.gamemode === 'cpu' &&
         ((currentMark === 'x' && state.playerX.name === 'Cpu') ||
           (currentMark === 'o' && state.playerO.name === 'Cpu'));
-      return {
+      const newState = {
         ...state,
         currentMark,
         startingMark,
@@ -78,20 +89,30 @@ const useStore = create<Store>()((set) => ({
         nbOfMoves: 0,
         isCpuMove,
       };
+      setLocalStorageData(newState);
+      return newState;
     }),
   restartGame: () =>
-    set((state) => ({
-      ...state,
-      currentMark: 'x',
-      startingMark: 'x',
-      playerO: { ...state.playerO, score: 0 },
-      playerX: { ...state.playerX, score: 0 },
-      ties: 0,
-      nbOfMoves: 0,
-      currentBoard: [...DEFAULT_BOARD],
-      isCpuMove: state.gamemode === 'cpu' && state.playerX.name === 'Cpu',
-    })),
-  quitGame: () => set((state) => ({ ...state, ...DEFAULT_STORE })),
+    set((state) => {
+      const newState = {
+        ...state,
+        currentMark: 'x',
+        startingMark: 'x',
+        playerO: { ...state.playerO, score: 0 },
+        playerX: { ...state.playerX, score: 0 },
+        ties: 0,
+        nbOfMoves: 0,
+        currentBoard: [...DEFAULT_BOARD],
+        isCpuMove: state.gamemode === 'cpu' && state.playerX.name === 'Cpu',
+      } as Store;
+      setLocalStorageData(newState);
+      return newState;
+    }),
+  quitGame: () =>
+    set((state) => {
+      clearLocalStorageData();
+      return { ...state, ...DEFAULT_STORE };
+    }),
 }));
 
 export default useStore;
