@@ -17,10 +17,10 @@ function NewGame() {
       <div className={styles.markPicker}>
         <h2>Pick player 1’s mark</h2>
         <div className={styles.switch}>
-          <button data-active={mark === 'x'} onClick={() => setMark('x')}>
+          <button data-active={mark === 'x'} aria-label="Play as X" onClick={() => setMark('x')}>
             <IconX />
           </button>
-          <button data-active={mark === 'o'} onClick={() => setMark('o')}>
+          <button data-active={mark === 'o'} aria-label="Play as O" onClick={() => setMark('o')}>
             <IconO />
           </button>
         </div>

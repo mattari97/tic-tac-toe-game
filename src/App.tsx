@@ -19,9 +19,10 @@ function App() {
 
   return (
     <>
-      <div className={styles.container}>
+      <main className={styles.container}>
+        <h1 className="sr-only">Tic Tac Toe Game</h1>
         {gamemode === 'idle' ? <NewGame /> : <Board toggleRestartModal={toggleRestartIsOpen} />}
-      </div>
+      </main>
       <ResultsModal
         result={result}
         toggleCondition={!!result}
